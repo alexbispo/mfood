@@ -1,0 +1,1 @@
+mvn quarkus:add-extension -Dextensions="io.quarkus:quarkus-jdbc-postgresql, io.quarkus:quarkus-hibernate-orm-panache, io.quarkus:quarkus-resteasy-jsonb, io.quarkus:quarkus-smallrye-openapi, io.quarkus:quarkus-hibernate-validator"
