@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="QuarkusDeploymentProjectService">
+    <option name="modules">
+      <map>
+        <entry key="cadastro">
+          <value>
+            <ModuleState>
+              <option name="hash" value="1410733026" />
+              <option name="version" value="1" />
+            </ModuleState>
+          </value>
+        </entry>
+      </map>
+    </option>
+  </component>
+</project>
