@@ -15,13 +15,7 @@ public class CadastroTestLifecycleManager implements QuarkusTestResourceLifecycl
     @Override
     public Map<String, String> start() {
         POSTGRES.start();
-        Map<String, String> propriedades = new HashMap<String, String>();
-
-        // System.out.println("************* quarkus.datasource.jdbc.url "+ POSTGRES.getJdbcUrl());
-        // System.out.println("************* quarkus.datasource.jdbc.url "+ "jdbc:postgresql://localhost:" +
-        // POSTGRES.getMappedPort(5432) + "/postgres");
-        // System.out.println("******** quarkus.datasource.username "+ POSTGRES.getUsername());
-        // System.out.println("**********quarkus.datasource.password "+ POSTGRES.getPassword());
+        Map<String, String> propriedades = new HashMap<>();
 
         // Banco de dados
         propriedades.put("quarkus.datasource.jdbc.url", POSTGRES.getJdbcUrl());
