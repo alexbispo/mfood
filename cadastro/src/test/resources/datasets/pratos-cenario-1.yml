@@ -1,0 +1,5 @@
+prato:
+  - ID: 123
+    NOME: Prato 1
+    PRECO: 10.0
+    RESTAURANTE_ID: 123
