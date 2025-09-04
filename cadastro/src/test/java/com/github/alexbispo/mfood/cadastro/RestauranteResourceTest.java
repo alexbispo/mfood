@@ -4,14 +4,20 @@ import com.github.database.rider.cdi.api.DBRider;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
 import com.github.database.rider.core.api.dataset.DataSet;
+import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import io.quarkus.panache.common.Parameters;
 import io.quarkus.test.common.QuarkusTestResource;
 import io.quarkus.test.junit.QuarkusTest;
 import io.restassured.http.ContentType;
+import jakarta.inject.Inject;
+import jakarta.persistence.EntityManager;
+import junit.framework.AssertionFailedError;
 import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.util.Optional;
 
 import static io.restassured.RestAssured.given;
 
@@ -20,6 +26,9 @@ import static io.restassured.RestAssured.given;
 @QuarkusTestResource(CadastroTestLifecycleManager.class)
 @DBRider
 public class RestauranteResourceTest {
+
+    @Inject
+    EntityManager em;
 
     @Test
     @DataSet(value = "restaurantes-cenario-1.yml")
@@ -53,5 +62,45 @@ public class RestauranteResourceTest {
                             .and("cnpj", novoRstaurante.cnpj)).firstResult();
 
         Assertions.assertNotNull(restauranteCriado);
+    }
+
+    @Test
+    @DataSet(value = "restaurantes-cenario-1.yml")
+    public void testAtualizarRestaurante() {
+        Long idRestaurante = 123L;
+        String novoNome = "Restaurante Atualizado";
+        var restaurante = (Restaurante) Restaurante.findByIdOptional(idRestaurante).get();
+        restaurante.nome = novoNome;
+
+        given()
+                .contentType(ContentType.JSON)
+                .body(restaurante)
+                .when()
+                .put("/restaurantes/{id}", idRestaurante)
+                .then()
+                .statusCode(204);
+
+        var restauranteAtualizado = (Restaurante) Restaurante.findById(idRestaurante);
+        Assertions.assertEquals(novoNome, restauranteAtualizado.nome);
+    }
+
+    @Test
+    @DataSet(value = "restaurantes-cenario-1.yml")
+    public void testDeletarRestaurante() {
+        Long idRestaurante = 123L;
+
+        Assertions.assertNotNull(Restaurante.findById(idRestaurante));
+
+        given()
+                .contentType(ContentType.JSON)
+                .when()
+                .delete("/restaurantes/{id}", idRestaurante)
+                .then()
+                .statusCode(204);
+
+        // Necessário limpar o cache de primeiro nível do Hibernate (L1) e conseguir validar que o registro foi deletado.
+        em.clear();
+
+        Assertions.assertNull(Restaurante.findById(idRestaurante));
     }
 }
