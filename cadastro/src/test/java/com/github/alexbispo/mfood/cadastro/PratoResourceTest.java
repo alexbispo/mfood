@@ -88,4 +88,24 @@ public class PratoResourceTest {
         Assertions.assertEquals("Feijoada deliciosa", pratoAtualizado.descricao);
         Assertions.assertEquals(new BigDecimal("49.90"), pratoAtualizado.preco);
     }
+
+    @Test
+    @DataSet(value = {"restaurantes-cenario-1.yml", "pratos-cenario-1.yml"}, tableOrdering = {"restaurante", "prato"})
+    public void testDeletarPrato() {
+        Long idPrato = 123L;
+        Prato pratoParaDeletar = Prato.findById(idPrato);
+
+        RestAssured
+                .given()
+                .contentType(ContentType.JSON)
+                .when()
+                .delete("/restaurantes/{idRestaurante}/pratos/{idPrato}", pratoParaDeletar.restaurante.id, pratoParaDeletar.id)
+                .then()
+                .statusCode(204);
+
+        em.clear();
+
+        Prato pratoDeletado = Prato.findById(idPrato);
+        Assertions.assertNull(pratoDeletado);
+    }
 }
