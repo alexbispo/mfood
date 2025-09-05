@@ -62,4 +62,30 @@ public class PratoResourceTest {
         Prato pratoCriado = Prato.find("nome", novoPrato.nome).firstResult();
         Assertions.assertNotNull(pratoCriado);
     }
+
+    @Test
+    @DataSet(value = {"restaurantes-cenario-1.yml", "pratos-cenario-1.yml"}, tableOrdering = {"restaurante", "prato"})
+    public void testAtualizarPrato() {
+        Long idPrato = 123L;
+
+        Prato pratoParaAtualizar = Prato.findById(idPrato);
+        pratoParaAtualizar.nome = "Feijoada";
+        pratoParaAtualizar.descricao = "Feijoada deliciosa";
+        pratoParaAtualizar.preco = new BigDecimal("49.9");
+
+        RestAssured.given()
+                .contentType(ContentType.JSON)
+                .body(pratoParaAtualizar)
+                .when()
+                .put("/restaurantes/{id}/pratos/{idPrato}", pratoParaAtualizar.restaurante.id, pratoParaAtualizar.id)
+                .then()
+                .statusCode(204);
+
+        em.clear();
+
+        Prato pratoAtualizado = Prato.findById(idPrato);
+        Assertions.assertEquals("Feijoada", pratoAtualizado.nome);
+        Assertions.assertEquals("Feijoada deliciosa", pratoAtualizado.descricao);
+        Assertions.assertEquals(new BigDecimal("49.90"), pratoAtualizado.preco);
+    }
 }
