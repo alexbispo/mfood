@@ -1,5 +1,6 @@
 package com.github.alexbispo.mfood.cadastro;
 
+import com.github.alexbispo.mfood.cadastro.dto.AtualizaRestauranteDTO;
 import com.github.alexbispo.mfood.cadastro.dto.LocalizacaoDTO;
 import com.github.alexbispo.mfood.cadastro.dto.AdicionaRestauranteDTO;
 import com.github.database.rider.cdi.api.DBRider;
@@ -16,6 +17,8 @@ import org.approvaltests.Approvals;
 import org.approvaltests.core.Options;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
 
 import static io.restassured.RestAssured.given;
 
@@ -75,8 +78,8 @@ public class RestauranteResourceTest {
     @DataSet(value = "restaurantes-cenario-1.yml")
     public void testAtualizarRestaurante() {
         Long idRestaurante = 123L;
-        String novoNome = "Restaurante Atualizado";
-        var restaurante = (Restaurante) Restaurante.findByIdOptional(idRestaurante).get();
+        String novoNome = "Restaurante Atualizado - " + LocalDateTime.now();
+        var restaurante = new AtualizaRestauranteDTO();
         restaurante.nome = novoNome;
 
         given()

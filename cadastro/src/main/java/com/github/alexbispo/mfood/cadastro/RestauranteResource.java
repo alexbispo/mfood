@@ -1,6 +1,7 @@
 package com.github.alexbispo.mfood.cadastro;
 
 import com.github.alexbispo.mfood.cadastro.dto.AdicionaRestauranteDTO;
+import com.github.alexbispo.mfood.cadastro.dto.AtualizaRestauranteDTO;
 import com.github.alexbispo.mfood.cadastro.dto.ExibeRestauranteDTO;
 import com.github.alexbispo.mfood.cadastro.dto.RestauranteMapper;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
@@ -40,7 +41,7 @@ public class RestauranteResource {
     @PUT()
     @Path("{id}")
     @Transactional
-    public void updateById(@PathParam("id") Long id, Restaurante dto) {
+    public void updateById(@PathParam("id") Long id, AtualizaRestauranteDTO dto) {
         Restaurante restauranteEncontrado = (Restaurante) Restaurante.findByIdOptional(id)
                 .orElseThrow(NotFoundException::new);
 
