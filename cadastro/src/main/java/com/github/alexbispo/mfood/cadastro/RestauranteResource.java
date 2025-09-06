@@ -1,5 +1,8 @@
 package com.github.alexbispo.mfood.cadastro;
 
+import com.github.alexbispo.mfood.cadastro.dto.AdicionaRestauranteDTO;
+import com.github.alexbispo.mfood.cadastro.dto.ExibeRestauranteDTO;
+import com.github.alexbispo.mfood.cadastro.dto.RestauranteMapper;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -13,15 +16,24 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class RestauranteResource {
 
+    private final RestauranteMapper restauranteMapper;
+
+    public RestauranteResource(RestauranteMapper restauranteMapper) {
+        this.restauranteMapper = restauranteMapper;
+    }
+
     @GET
-    public List<Restaurante> getAll() {
-        return Restaurante.listAll();
+    public List<ExibeRestauranteDTO> getAll() {
+        return Restaurante.listAll().stream().map((r) -> {
+            return this.restauranteMapper.toDto((Restaurante) r);
+        }).toList();
     }
 
     @POST
     @Transactional
-    public Response create(Restaurante dto) {
-        dto.persist();
+    public Response create(AdicionaRestauranteDTO dto) {
+        Restaurante entity = this.restauranteMapper.toEntity(dto);
+        entity.persist();
         return Response.status(Response.Status.CREATED).build();
     }
 

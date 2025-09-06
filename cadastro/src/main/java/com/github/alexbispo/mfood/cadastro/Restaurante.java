@@ -20,7 +20,7 @@ public class Restaurante extends PanacheEntityBase {
 
     public String nome;
 
-    @ManyToOne
+    @OneToOne(cascade = CascadeType.ALL)
     public Localizacao localizacao;
 
     @CreationTimestamp
@@ -28,12 +28,4 @@ public class Restaurante extends PanacheEntityBase {
 
     @UpdateTimestamp
     public LocalDateTime dataAtualizacao;
-
-    public Localizacao getLocalizacao() {
-        return localizacao;
-    }
-
-    public void setLocalizacao(Localizacao localizacao) {
-        this.localizacao = localizacao;
-    }
 }

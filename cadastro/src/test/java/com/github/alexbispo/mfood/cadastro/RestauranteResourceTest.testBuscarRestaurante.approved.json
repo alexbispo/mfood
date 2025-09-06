@@ -1,1 +1,1 @@
-[{"id":123,"nome":"Novo Restaurante","proprietario":"ID do keyclock"},{"id":234,"nome":"Novo Restaurante 2","proprietario":"ID do keyclock 2"}]
+[{"id":567,"localizacao":{"latitude":-23.6491,"longitude":-46.8524},"nome":"Novo Restaurante","proprietario":"ID do keyclock"},{"id":890,"nome":"Novo Restaurante 2","proprietario":"ID do keyclock 2"}]

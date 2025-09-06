@@ -1,5 +1,7 @@
 package com.github.alexbispo.mfood.cadastro;
 
+import com.github.alexbispo.mfood.cadastro.dto.LocalizacaoDTO;
+import com.github.alexbispo.mfood.cadastro.dto.AdicionaRestauranteDTO;
 import com.github.database.rider.cdi.api.DBRider;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
@@ -27,7 +29,9 @@ public class RestauranteResourceTest {
     EntityManager em;
 
     @Test
-    @DataSet(value = "restaurantes-cenario-1.yml")
+//    @DataSet(value = {"restaurantes-cenario-1.yml", "pratos-cenario-1.yml"}, tableOrdering = {"restaurante", "prato"})
+
+    @DataSet(value = {"restaurantes-cenario-2.yml", "localizacao-cenario-1.yml"}, tableOrdering = {"localizacao", "restaurante"})
     public void testBuscarRestaurante() {
         String resposta = given()
                 .when()
@@ -39,10 +43,15 @@ public class RestauranteResourceTest {
 
     @Test
     public void testCriarRestaurante() {
-        Restaurante novoRstaurante = new Restaurante();
+        LocalizacaoDTO localizacao = new LocalizacaoDTO();
+        localizacao.latitude = -23.6491;
+        localizacao.longitude =  -46.8524;
+
+        AdicionaRestauranteDTO novoRstaurante = new AdicionaRestauranteDTO();
         novoRstaurante.nome = "Novo Restaurante";
         novoRstaurante.proprietario = "ID do keyclock";
         novoRstaurante.cnpj = "12345678901";
+        novoRstaurante.localizacao = localizacao;
 
         given()
                 .body(novoRstaurante)
@@ -51,13 +60,15 @@ public class RestauranteResourceTest {
                 .post("/restaurantes")
                 .then().statusCode(201);
 
-        var restauranteCriado = Restaurante
+        Restaurante restauranteCriado = Restaurante
                 .find("nome = :nome and proprietario = :proprietario and cnpj = :cnpj",
                     Parameters.with("nome", novoRstaurante.nome)
                             .and("proprietario", novoRstaurante.proprietario)
                             .and("cnpj", novoRstaurante.cnpj)).firstResult();
 
         Assertions.assertNotNull(restauranteCriado);
+        Assertions.assertEquals(localizacao.latitude, restauranteCriado.localizacao.latitude);
+        Assertions.assertEquals(localizacao.longitude, restauranteCriado.localizacao.longitude);
     }
 
     @Test

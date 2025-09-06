@@ -1,0 +1,9 @@
+restaurante:
+  - ID: 567
+    NOME: "Novo Restaurante"
+    PROPRIETARIO: "ID do keyclock"
+    LOCALIZACAO_ID: 1
+  - ID: 890
+    NOME: "Novo Restaurante 2"
+    PROPRIETARIO: "ID do keyclock 2"
+
