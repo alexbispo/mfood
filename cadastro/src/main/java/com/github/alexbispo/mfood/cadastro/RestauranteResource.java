@@ -47,7 +47,7 @@ public class RestauranteResource {
     Restaurante restauranteEncontrado =
         (Restaurante) Restaurante.findByIdOptional(id).orElseThrow(NotFoundException::new);
 
-    restauranteEncontrado.nome = dto.nome;
+    restauranteEncontrado.nome = dto.nome();
     restauranteEncontrado.persist();
   }
 

@@ -49,15 +49,11 @@ public class RestauranteResourceTest {
 
   @Test
   public void testCriarRestaurante() {
-    LocalizacaoDTO localizacao = new LocalizacaoDTO();
-    localizacao.latitude = -23.6491;
-    localizacao.longitude = -46.8524;
+    LocalizacaoDTO localizacao = new LocalizacaoDTO(-23.6491, -46.8524);
 
-    AdicionaRestauranteDTO novoRstaurante = new AdicionaRestauranteDTO();
-    novoRstaurante.nome = "Novo Restaurante";
-    novoRstaurante.proprietario = "ID do keyclock";
-    novoRstaurante.cnpj = "12345678901";
-    novoRstaurante.localizacao = localizacao;
+    AdicionaRestauranteDTO novoRstaurante =
+        new AdicionaRestauranteDTO(
+            "Novo Restaurante", "ID do keyclock", "12345678901", localizacao);
 
     given()
         .body(novoRstaurante)
@@ -70,14 +66,14 @@ public class RestauranteResourceTest {
     Restaurante restauranteCriado =
         Restaurante.find(
                 "nome = :nome and proprietario = :proprietario and cnpj = :cnpj",
-                Parameters.with("nome", novoRstaurante.nome)
-                    .and("proprietario", novoRstaurante.proprietario)
-                    .and("cnpj", novoRstaurante.cnpj))
+                Parameters.with("nome", novoRstaurante.nome())
+                    .and("proprietario", novoRstaurante.proprietario())
+                    .and("cnpj", novoRstaurante.cnpj()))
             .firstResult();
 
     Assertions.assertNotNull(restauranteCriado);
-    Assertions.assertEquals(localizacao.latitude, restauranteCriado.localizacao.latitude);
-    Assertions.assertEquals(localizacao.longitude, restauranteCriado.localizacao.longitude);
+    Assertions.assertEquals(localizacao.latitude(), restauranteCriado.localizacao.latitude);
+    Assertions.assertEquals(localizacao.longitude(), restauranteCriado.localizacao.longitude);
   }
 
   @Test
@@ -85,8 +81,7 @@ public class RestauranteResourceTest {
   public void testAtualizarRestaurante() {
     Long idRestaurante = 123L;
     String novoNome = "Restaurante Atualizado - " + LocalDateTime.now();
-    var restaurante = new AtualizaRestauranteDTO();
-    restaurante.nome = novoNome;
+    var restaurante = new AtualizaRestauranteDTO(novoNome);
 
     given()
         .contentType(ContentType.JSON)

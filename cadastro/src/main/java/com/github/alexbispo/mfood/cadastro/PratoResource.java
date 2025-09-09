@@ -59,9 +59,9 @@ public class PratoResource {
 
     Prato prato = (Prato) Prato.findByIdOptional(id).orElseThrow(NotFoundException::new);
 
-    prato.nome = dto.nome;
-    prato.descricao = dto.descricao;
-    prato.preco = dto.preco;
+    prato.nome = dto.nome();
+    prato.descricao = dto.descricao();
+    prato.preco = dto.preco();
 
     prato.persist();
   }

@@ -1,12 +1,4 @@
 package com.github.alexbispo.mfood.cadastro.dto;
 
-public class AdicionaRestauranteDTO {
-
-  public String proprietario;
-
-  public String cnpj;
-
-  public String nome;
-
-  public LocalizacaoDTO localizacao;
-}
+public record AdicionaRestauranteDTO(
+    String proprietario, String cnpj, String nome, LocalizacaoDTO localizacao) {}

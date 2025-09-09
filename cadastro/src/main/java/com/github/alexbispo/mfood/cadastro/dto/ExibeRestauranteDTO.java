@@ -2,19 +2,11 @@ package com.github.alexbispo.mfood.cadastro.dto;
 
 import java.time.LocalDateTime;
 
-public class ExibeRestauranteDTO {
-
-  public Long id;
-
-  public String proprietario;
-
-  public String cnpj;
-
-  public String nome;
-
-  public LocalDateTime dataCriacao;
-
-  public LocalDateTime dataAtualizacao;
-
-  public LocalizacaoDTO localizacao;
-}
+public record ExibeRestauranteDTO(
+    Long id,
+    String proprietario,
+    String cnpj,
+    String nome,
+    LocalDateTime dataCriacao,
+    LocalDateTime dataAtualizacao,
+    LocalizacaoDTO localizacao) {}

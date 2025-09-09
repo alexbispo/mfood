@@ -55,9 +55,8 @@ public class PratoResourceTest {
   public void testCriarPrato() {
     Restaurante restaurante = Restaurante.findById(123L);
 
-    AdicionaPratoDTO novoPrato = new AdicionaPratoDTO();
-    novoPrato.nome = "Novo Prato testCriarPrato";
-    novoPrato.preco = new BigDecimal("25.00");
+    AdicionaPratoDTO novoPrato =
+        new AdicionaPratoDTO("Novo Prato testCriarPrato", null, new BigDecimal("25.00"));
 
     RestAssured.given()
         .contentType(ContentType.JSON)
@@ -67,9 +66,9 @@ public class PratoResourceTest {
         .then()
         .statusCode(201);
 
-    Prato pratoCriado = Prato.find("nome", novoPrato.nome).firstResult();
+    Prato pratoCriado = Prato.find("nome", novoPrato.nome()).firstResult();
     Assertions.assertNotNull(pratoCriado);
-    Assertions.assertEquals(novoPrato.preco, pratoCriado.preco);
+    Assertions.assertEquals(novoPrato.preco(), pratoCriado.preco);
     Assertions.assertEquals(restaurante.id, pratoCriado.restaurante.id);
   }
 
@@ -81,10 +80,8 @@ public class PratoResourceTest {
     Long idPrato = 123L;
     Prato pratoParaAtualizar = Prato.findById(idPrato);
 
-    AtualizaPratoDTO pratoDTO = new AtualizaPratoDTO();
-    pratoDTO.nome = "Feijoada";
-    pratoDTO.descricao = "Feijoada deliciosa";
-    pratoDTO.preco = new BigDecimal("49.90");
+    AtualizaPratoDTO pratoDTO =
+        new AtualizaPratoDTO("Feijoada", "Feijoada deliciosa", new BigDecimal("49.90"));
 
     RestAssured.given()
         .contentType(ContentType.JSON)
@@ -100,9 +97,9 @@ public class PratoResourceTest {
     em.clear();
 
     Prato pratoAtualizado = Prato.findById(idPrato);
-    Assertions.assertEquals(pratoDTO.nome, pratoAtualizado.nome);
-    Assertions.assertEquals(pratoDTO.descricao, pratoAtualizado.descricao);
-    Assertions.assertEquals(pratoDTO.preco, pratoAtualizado.preco);
+    Assertions.assertEquals(pratoDTO.nome(), pratoAtualizado.nome);
+    Assertions.assertEquals(pratoDTO.descricao(), pratoAtualizado.descricao);
+    Assertions.assertEquals(pratoDTO.preco(), pratoAtualizado.preco);
   }
 
   @Test

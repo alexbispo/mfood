@@ -1,6 +1,3 @@
 package com.github.alexbispo.mfood.cadastro.dto;
 
-public class AtualizaRestauranteDTO {
-
-  public String nome;
-}
+public record AtualizaRestauranteDTO(String nome) {}
