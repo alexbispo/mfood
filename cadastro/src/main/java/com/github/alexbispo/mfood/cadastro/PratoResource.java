@@ -1,5 +1,9 @@
 package com.github.alexbispo.mfood.cadastro;
 
+import com.github.alexbispo.mfood.cadastro.dto.AdicionaPratoDTO;
+import com.github.alexbispo.mfood.cadastro.dto.AtualizaPratoDTO;
+import com.github.alexbispo.mfood.cadastro.dto.ExibePratoDTO;
+import com.github.alexbispo.mfood.cadastro.dto.PratoMapper;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
@@ -13,27 +17,40 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class PratoResource {
 
+    private final PratoMapper pratoMapper;
+
+    public PratoResource(PratoMapper pratoMapper) {
+        this.pratoMapper = pratoMapper;
+    }
+
     @GET
-    public List<Prato> getPratosByRestaurante(@PathParam("restauranteId") Long restauranteId) {
+    public List<ExibePratoDTO> getPratosByRestaurante(@PathParam("restauranteId") Long restauranteId) {
         Restaurante restaurante = (Restaurante) Restaurante.findByIdOptional(restauranteId)
                 .orElseThrow(NotFoundException::new);
 
-        return Prato.list("restaurante", restaurante);
+        return Prato
+                .list("restaurante", restaurante)
+                .stream().map(p -> this.pratoMapper.toDto((Prato) p))
+                .toList();
     }
 
     @POST
     @Transactional
-    public Response create(@PathParam("restauranteId") Long restauranteId, Prato dto) {
-        dto.restaurante = (Restaurante) Restaurante.findByIdOptional(restauranteId)
+    public Response create(@PathParam("restauranteId") Long restauranteId, AdicionaPratoDTO dto) {
+        Restaurante restaurante = (Restaurante) Restaurante.findByIdOptional(restauranteId)
                 .orElseThrow(NotFoundException::new);
-        dto.persist();
+
+        Prato entity = this.pratoMapper.toEntity(dto);
+        entity.restaurante = restaurante;
+        entity.persist();
+
         return Response.status(Response.Status.CREATED).build();
     }
 
     @PUT
     @Path("{id}")
     @Transactional
-    public void update(@PathParam("restauranteId") Long restauranteId, @PathParam("id") Long id, Prato dto) {
+    public void update(@PathParam("restauranteId") Long restauranteId, @PathParam("id") Long id, AtualizaPratoDTO dto) {
         Restaurante.findByIdOptional(restauranteId).orElseThrow(NotFoundException::new);
 
         Prato prato = (Prato) Prato.findByIdOptional(id).orElseThrow(NotFoundException::new);

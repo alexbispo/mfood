@@ -1,5 +1,7 @@
 package com.github.alexbispo.mfood.cadastro;
 
+import com.github.alexbispo.mfood.cadastro.dto.AdicionaPratoDTO;
+import com.github.alexbispo.mfood.cadastro.dto.AtualizaPratoDTO;
 import com.github.database.rider.cdi.api.DBRider;
 import com.github.database.rider.core.api.configuration.DBUnit;
 import com.github.database.rider.core.api.configuration.Orthography;
@@ -45,10 +47,9 @@ public class PratoResourceTest {
     public void testCriarPrato() {
         Restaurante restaurante = Restaurante.findById(123L);
 
-        Prato novoPrato = new Prato();
-        novoPrato.restaurante = restaurante;
+        AdicionaPratoDTO novoPrato = new AdicionaPratoDTO();
         novoPrato.nome = "Novo Prato testCriarPrato";
-        novoPrato.preco = new BigDecimal("25.0");
+        novoPrato.preco = new BigDecimal("25.00");
 
         RestAssured
                 .given()
@@ -61,21 +62,24 @@ public class PratoResourceTest {
 
         Prato pratoCriado = Prato.find("nome", novoPrato.nome).firstResult();
         Assertions.assertNotNull(pratoCriado);
+        Assertions.assertEquals(novoPrato.preco, pratoCriado.preco);
+        Assertions.assertEquals(restaurante.id, pratoCriado.restaurante.id);
     }
 
     @Test
     @DataSet(value = {"restaurantes-cenario-1.yml", "pratos-cenario-1.yml"}, tableOrdering = {"restaurante", "prato"})
     public void testAtualizarPrato() {
         Long idPrato = 123L;
-
         Prato pratoParaAtualizar = Prato.findById(idPrato);
-        pratoParaAtualizar.nome = "Feijoada";
-        pratoParaAtualizar.descricao = "Feijoada deliciosa";
-        pratoParaAtualizar.preco = new BigDecimal("49.9");
+
+        AtualizaPratoDTO pratoDTO = new AtualizaPratoDTO();
+        pratoDTO.nome = "Feijoada";
+        pratoDTO.descricao = "Feijoada deliciosa";
+        pratoDTO.preco = new BigDecimal("49.90");
 
         RestAssured.given()
                 .contentType(ContentType.JSON)
-                .body(pratoParaAtualizar)
+                .body(pratoDTO)
                 .when()
                 .put("/restaurantes/{id}/pratos/{idPrato}", pratoParaAtualizar.restaurante.id, pratoParaAtualizar.id)
                 .then()
@@ -84,9 +88,9 @@ public class PratoResourceTest {
         em.clear();
 
         Prato pratoAtualizado = Prato.findById(idPrato);
-        Assertions.assertEquals("Feijoada", pratoAtualizado.nome);
-        Assertions.assertEquals("Feijoada deliciosa", pratoAtualizado.descricao);
-        Assertions.assertEquals(new BigDecimal("49.90"), pratoAtualizado.preco);
+        Assertions.assertEquals(pratoDTO.nome, pratoAtualizado.nome);
+        Assertions.assertEquals(pratoDTO.descricao, pratoAtualizado.descricao);
+        Assertions.assertEquals(pratoDTO.preco, pratoAtualizado.preco);
     }
 
     @Test
