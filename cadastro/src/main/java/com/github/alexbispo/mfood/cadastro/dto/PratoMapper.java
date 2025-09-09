@@ -6,7 +6,7 @@ import org.mapstruct.Mapper;
 @Mapper(componentModel = "jakarta")
 public interface PratoMapper {
 
-    Prato toEntity(AdicionaPratoDTO dto);
+  Prato toEntity(AdicionaPratoDTO dto);
 
-    ExibePratoDTO toDto(Prato prato);
+  ExibePratoDTO toDto(Prato prato);
 }

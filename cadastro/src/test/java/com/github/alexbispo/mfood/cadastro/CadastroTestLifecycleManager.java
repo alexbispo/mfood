@@ -1,34 +1,35 @@
 package com.github.alexbispo.mfood.cadastro;
 
+import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.testcontainers.containers.PostgreSQLContainer;
-
-import io.quarkus.test.common.QuarkusTestResourceLifecycleManager;
 
 public class CadastroTestLifecycleManager implements QuarkusTestResourceLifecycleManager {
 
-    public static final PostgreSQLContainer<?> POSTGRES = new PostgreSQLContainer<>("postgres:alpine3.19")
-            .withDatabaseName("postgres").withUsername("postgres").withPassword("postgres");
+  public static final PostgreSQLContainer<?> POSTGRES =
+      new PostgreSQLContainer<>("postgres:alpine3.19")
+          .withDatabaseName("postgres")
+          .withUsername("postgres")
+          .withPassword("postgres");
 
-    @Override
-    public Map<String, String> start() {
-        POSTGRES.start();
-        Map<String, String> propriedades = new HashMap<>();
+  @Override
+  public Map<String, String> start() {
+    POSTGRES.start();
+    Map<String, String> propriedades = new HashMap<>();
 
-        // Banco de dados
-        propriedades.put("quarkus.datasource.jdbc.url", POSTGRES.getJdbcUrl());
-        propriedades.put("quarkus.datasource.username", POSTGRES.getUsername());
-        propriedades.put("quarkus.datasource.password", POSTGRES.getPassword());
+    // Banco de dados
+    propriedades.put("quarkus.datasource.jdbc.url", POSTGRES.getJdbcUrl());
+    propriedades.put("quarkus.datasource.username", POSTGRES.getUsername());
+    propriedades.put("quarkus.datasource.password", POSTGRES.getPassword());
 
-        return propriedades;
+    return propriedades;
+  }
+
+  @Override
+  public void stop() {
+    if (POSTGRES != null && POSTGRES.isRunning()) {
+      POSTGRES.stop();
     }
-
-    @Override
-    public void stop() {
-        if (POSTGRES != null && POSTGRES.isRunning()) {
-            POSTGRES.stop();
-        }
-    }
+  }
 }

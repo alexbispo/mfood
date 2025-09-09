@@ -1,31 +1,29 @@
 package com.github.alexbispo.mfood.cadastro;
+
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
+import java.time.LocalDateTime;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "restaurante")
 public class Restaurante extends PanacheEntityBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public Long id;
 
-    public String proprietario;
+  public String proprietario;
 
-    public String cnpj;
+  public String cnpj;
 
-    public String nome;
+  public String nome;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    public Localizacao localizacao;
+  @OneToOne(cascade = CascadeType.ALL)
+  public Localizacao localizacao;
 
-    @CreationTimestamp
-    public LocalDateTime dataCriacao;
+  @CreationTimestamp public LocalDateTime dataCriacao;
 
-    @UpdateTimestamp
-    public LocalDateTime dataAtualizacao;
+  @UpdateTimestamp public LocalDateTime dataAtualizacao;
 }

@@ -4,18 +4,17 @@ import java.time.LocalDateTime;
 
 public class ExibeRestauranteDTO {
 
-    public Long id;
+  public Long id;
 
-    public String proprietario;
+  public String proprietario;
 
-    public String cnpj;
+  public String cnpj;
 
-    public String nome;
+  public String nome;
 
-    public LocalDateTime dataCriacao;
+  public LocalDateTime dataCriacao;
 
-    public LocalDateTime dataAtualizacao;
+  public LocalDateTime dataAtualizacao;
 
-    public LocalizacaoDTO localizacao;
-
+  public LocalizacaoDTO localizacao;
 }

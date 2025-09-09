@@ -9,7 +9,6 @@ import jakarta.transaction.Transactional;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-
 import java.util.List;
 
 @Path("/restaurantes")
@@ -17,45 +16,50 @@ import java.util.List;
 @Consumes(MediaType.APPLICATION_JSON)
 public class RestauranteResource {
 
-    private final RestauranteMapper restauranteMapper;
+  private final RestauranteMapper restauranteMapper;
 
-    public RestauranteResource(RestauranteMapper restauranteMapper) {
-        this.restauranteMapper = restauranteMapper;
-    }
+  public RestauranteResource(RestauranteMapper restauranteMapper) {
+    this.restauranteMapper = restauranteMapper;
+  }
 
-    @GET
-    public List<ExibeRestauranteDTO> getAll() {
-        return Restaurante.listAll().stream().map((r) -> {
-            return this.restauranteMapper.toDto((Restaurante) r);
-        }).toList();
-    }
+  @GET
+  public List<ExibeRestauranteDTO> getAll() {
+    return Restaurante.listAll().stream()
+        .map(
+            (r) -> {
+              return this.restauranteMapper.toDto((Restaurante) r);
+            })
+        .toList();
+  }
 
-    @POST
-    @Transactional
-    public Response create(AdicionaRestauranteDTO dto) {
-        Restaurante entity = this.restauranteMapper.toEntity(dto);
-        entity.persist();
-        return Response.status(Response.Status.CREATED).build();
-    }
+  @POST
+  @Transactional
+  public Response create(AdicionaRestauranteDTO dto) {
+    Restaurante entity = this.restauranteMapper.toEntity(dto);
+    entity.persist();
+    return Response.status(Response.Status.CREATED).build();
+  }
 
-    @PUT()
-    @Path("{id}")
-    @Transactional
-    public void updateById(@PathParam("id") Long id, AtualizaRestauranteDTO dto) {
-        Restaurante restauranteEncontrado = (Restaurante) Restaurante.findByIdOptional(id)
-                .orElseThrow(NotFoundException::new);
+  @PUT()
+  @Path("{id}")
+  @Transactional
+  public void updateById(@PathParam("id") Long id, AtualizaRestauranteDTO dto) {
+    Restaurante restauranteEncontrado =
+        (Restaurante) Restaurante.findByIdOptional(id).orElseThrow(NotFoundException::new);
 
-        restauranteEncontrado.nome = dto.nome;
-        restauranteEncontrado.persist();
-    }
+    restauranteEncontrado.nome = dto.nome;
+    restauranteEncontrado.persist();
+  }
 
-    @DELETE
-    @Path("{id}")
-    @Transactional
-    public void deleteById(@PathParam("id") Long id) {
-        Restaurante.findByIdOptional(id)
-                .ifPresentOrElse(PanacheEntityBase::delete, () -> {
-                    throw new NotFoundException();
-                });
-    }
+  @DELETE
+  @Path("{id}")
+  @Transactional
+  public void deleteById(@PathParam("id") Long id) {
+    Restaurante.findByIdOptional(id)
+        .ifPresentOrElse(
+            PanacheEntityBase::delete,
+            () -> {
+              throw new NotFoundException();
+            });
+  }
 }

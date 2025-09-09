@@ -2,32 +2,28 @@ package com.github.alexbispo.mfood.cadastro;
 
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "prato")
 public class Prato extends PanacheEntityBase {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public Long id;
+  @Id
+  @GeneratedValue(strategy = GenerationType.IDENTITY)
+  public Long id;
 
-    public String nome;
+  public String nome;
 
-    public String descricao;
+  public String descricao;
 
-    @ManyToOne
-    public Restaurante restaurante;
+  @ManyToOne public Restaurante restaurante;
 
-    public BigDecimal preco;
+  public BigDecimal preco;
 
-    @CreationTimestamp
-    public LocalDateTime dataCriacao;
+  @CreationTimestamp public LocalDateTime dataCriacao;
 
-    @UpdateTimestamp
-    public LocalDateTime dataAtualizacao;
+  @UpdateTimestamp public LocalDateTime dataAtualizacao;
 }

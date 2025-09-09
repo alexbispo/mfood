@@ -4,9 +4,9 @@ import java.math.BigDecimal;
 
 public class AdicionaPratoDTO {
 
-    public String nome;
+  public String nome;
 
-    public String descricao;
+  public String descricao;
 
-    public BigDecimal preco;
+  public BigDecimal preco;
 }
