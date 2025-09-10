@@ -41,7 +41,7 @@ public class PratoResource {
         (Restaurante)
             Restaurante.findByIdOptional(restauranteId).orElseThrow(NotFoundException::new);
 
-    Prato entity = this.pratoMapper.toEntity(dto);
+    Prato entity = this.pratoMapper.adicionaToEntity(dto);
     entity.restaurante = restaurante;
     entity.persist();
 
@@ -59,9 +59,7 @@ public class PratoResource {
 
     Prato prato = (Prato) Prato.findByIdOptional(id).orElseThrow(NotFoundException::new);
 
-    prato.nome = dto.nome();
-    prato.descricao = dto.descricao();
-    prato.preco = dto.preco();
+    prato = this.pratoMapper.atualizaToEntity(dto, prato);
 
     prato.persist();
   }

@@ -6,6 +6,7 @@ import com.github.alexbispo.mfood.cadastro.dto.ExibeRestauranteDTO;
 import com.github.alexbispo.mfood.cadastro.dto.RestauranteMapper;
 import io.quarkus.hibernate.orm.panache.PanacheEntityBase;
 import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -34,8 +35,8 @@ public class RestauranteResource {
 
   @POST
   @Transactional
-  public Response create(AdicionaRestauranteDTO dto) {
-    Restaurante entity = this.restauranteMapper.toEntity(dto);
+  public Response create(@Valid AdicionaRestauranteDTO dto) {
+    Restaurante entity = this.restauranteMapper.adicionaToEntity(dto);
     entity.persist();
     return Response.status(Response.Status.CREATED).build();
   }
@@ -47,7 +48,7 @@ public class RestauranteResource {
     Restaurante restauranteEncontrado =
         (Restaurante) Restaurante.findByIdOptional(id).orElseThrow(NotFoundException::new);
 
-    restauranteEncontrado.nome = dto.nome();
+    restauranteEncontrado = this.restauranteMapper.atualizaToEntity(dto, restauranteEncontrado);
     restauranteEncontrado.persist();
   }
 

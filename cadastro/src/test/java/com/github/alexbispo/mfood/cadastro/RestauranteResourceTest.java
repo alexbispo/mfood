@@ -34,9 +34,6 @@ public class RestauranteResourceTest {
   @Inject EntityManager em;
 
   @Test
-  //    @DataSet(value = {"restaurantes-cenario-1.yml", "pratos-cenario-1.yml"}, tableOrdering =
-  // {"restaurante", "prato"})
-
   @DataSet(
       value = {"restaurantes-cenario-2.yml", "localizacao-cenario-1.yml"},
       tableOrdering = {"localizacao", "restaurante"})
@@ -53,7 +50,7 @@ public class RestauranteResourceTest {
 
     AdicionaRestauranteDTO novoRstaurante =
         new AdicionaRestauranteDTO(
-            "Novo Restaurante", "ID do keyclock", "12345678901", localizacao);
+            "ID do keyclock", "64732064000160", "Restaurante Teste", localizacao);
 
     given()
         .body(novoRstaurante)
