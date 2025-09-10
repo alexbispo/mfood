@@ -36,6 +36,13 @@ public class RestauranteResource {
   @POST
   @Transactional
   public Response create(@Valid AdicionaRestauranteDTO dto) {
+    Restaurante.find("cnpj", dto.cnpj())
+        .firstResultOptional()
+        .ifPresent(
+            p -> {
+              throw new BadRequestException("CNPJ já cadastrado!");
+            });
+
     Restaurante entity = this.restauranteMapper.adicionaToEntity(dto);
     entity.persist();
     return Response.status(Response.Status.CREATED).build();

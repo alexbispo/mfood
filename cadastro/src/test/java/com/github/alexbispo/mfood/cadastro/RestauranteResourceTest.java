@@ -75,6 +75,25 @@ public class RestauranteResourceTest {
 
   @Test
   @DataSet(value = "restaurantes-cenario-1.yml")
+  public void testDadoCNPJExistenteEntaoRetornaErro() {
+    Restaurante restauranteExistente = Restaurante.findById(123L);
+    LocalizacaoDTO localizacao = new LocalizacaoDTO(-23.6491, -46.8524);
+
+    AdicionaRestauranteDTO novoRstaurante =
+        new AdicionaRestauranteDTO(
+            "ID do keyclock", restauranteExistente.cnpj, "Restaurante Teste", localizacao);
+
+    given()
+        .body(novoRstaurante)
+        .contentType(ContentType.JSON)
+        .when()
+        .post("/restaurantes")
+        .then()
+        .statusCode(400);
+  }
+
+  @Test
+  @DataSet(value = "restaurantes-cenario-1.yml")
   public void testAtualizarRestaurante() {
     Long idRestaurante = 123L;
     String novoNome = "Restaurante Atualizado - " + LocalDateTime.now();

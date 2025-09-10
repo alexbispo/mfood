@@ -1,9 +1,11 @@
 restaurante:
   - ID: 567
     NOME: "Novo Restaurante"
+    CNPJ: "36603610000127"
     PROPRIETARIO: "ID do keyclock"
     LOCALIZACAO_ID: 1
   - ID: 890
     NOME: "Novo Restaurante 2"
+    CNPJ: "77720097000131"
     PROPRIETARIO: "ID do keyclock 2"
 

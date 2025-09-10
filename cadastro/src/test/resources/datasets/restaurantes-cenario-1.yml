@@ -1,7 +1,9 @@
 restaurante:
   - ID: 123
     NOME: "Novo Restaurante"
+    CNPJ: "78543193000114"
     PROPRIETARIO: "ID do keyclock"
   - ID: 234
     NOME: "Novo Restaurante 2"
+    CNPJ: "62348144000190"
     PROPRIETARIO: "ID do keyclock 2"
